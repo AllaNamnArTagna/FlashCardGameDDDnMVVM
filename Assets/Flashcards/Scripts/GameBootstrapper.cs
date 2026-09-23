@@ -11,8 +11,8 @@ namespace Flashcards
 {
     public sealed class GameBootstrapper : MonoBehaviour
     {
-        [Header("Dog placement (world units)")]
-        [SerializeField] private Vector2 _dogScreenPosition = new Vector2(4.2f, -1.6f);
+        [Header("Dog placement (canvas units, relative to screen center)")]
+        [SerializeField] private Vector2 _dogPosition = new Vector2(550f, -140f);
         [SerializeField] private float _dogScale = 1.8f;
 
         private Canvas _canvas;
@@ -24,7 +24,7 @@ namespace Flashcards
             CreateCamera();
             CreateEventSystemIfMissing();
             _canvas = CreateCanvas();
-            DogView dog = CreateDog();
+            DogView dog = CreateDog(_canvas);
             QuizViewModel vm = new QuizViewModel(new ResourceQuestionRepository(), new DefaultScorePolicy());
 
             _startScreen = StartScreenView.Create(_canvas, () =>
@@ -90,11 +90,16 @@ namespace Flashcards
             return canvas;
         }
 
-        private DogView CreateDog()
+        private static DogView CreateDog(Canvas canvas)
         {
-            var go = new GameObject("Dog");
-            go.transform.position = _dogScreenPosition;
-            go.transform.localScale = Vector3.one * _dogScale;
+            var go = new GameObject("Dog", typeof(RectTransform));
+            RectTransform rt = (RectTransform)go.transform;
+            rt.SetParent(canvas.transform, false);
+            rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f);
+            rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.anchoredPosition = new Vector2(550f, -140f);
+            rt.localScale = Vector3.one * 1.8f;
+            rt.SetAsLastSibling();
             return go.AddComponent<DogView>();
         }
     }

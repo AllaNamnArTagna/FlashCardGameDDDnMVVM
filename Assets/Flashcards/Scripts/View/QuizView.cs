@@ -55,44 +55,37 @@ namespace Flashcards.View
 
         private void BuildHud(RectTransform root)
         {
-            var hud = new GameObject("Hud", typeof(RectTransform)).transform as RectTransform;
-            hud.SetParent(root, false);
-            hud.anchorMin = new Vector2(0f, 1f);
-            hud.anchorMax = new Vector2(1f, 1f);
-            hud.pivot = new Vector2(0.5f, 1f);
-            hud.sizeDelta = new Vector2(0f, 40f);
-            hud.anchoredPosition = Vector2.zero;
+            _scoreText = UIElements.CreateText(root, "ScoreText", "Score: 0", 22, TextAnchor.MiddleLeft, UIElements.AccentColor);
+            PlaceTopLeft(_scoreText.rectTransform, 24f, -34f, new Vector2(220f, 30f));
 
-            _scoreText = UIElements.CreateText(hud, "ScoreText", "Score: 0", 22, TextAnchor.MiddleLeft, UIElements.AccentColor);
-            Place(_scoreText.rectTransform, new Vector2(0f, 1f), new Vector2(0.33f, 1f), new Vector2(20f, -4f));
+            _progressText = UIElements.CreateText(root, "ProgressText", "0 / 0", 22, TextAnchor.MiddleRight, UIElements.TextColor);
+            PlaceTopRight(_progressText.rectTransform, -24f, -34f, new Vector2(220f, 30f));
 
-            _streakText = UIElements.CreateText(hud, "StreakText", "Streak: 0", 22, TextAnchor.MiddleCenter, UIElements.TextColor);
-            Place(_streakText.rectTransform, new Vector2(0.33f, 1f), new Vector2(0.66f, 1f), new Vector2(0f, -4f));
-
-            _progressText = UIElements.CreateText(hud, "ProgressText", "0 / 0", 22, TextAnchor.MiddleRight, UIElements.TextColor);
-            Place(_progressText.rectTransform, new Vector2(0.66f, 1f), new Vector2(1f, 1f), new Vector2(-20f, -4f));
+            _streakText = UIElements.CreateText(root, "StreakText", "Streak: 0", 22, TextAnchor.MiddleCenter, UIElements.TextColor);
+            PlaceTopCenter(_streakText.rectTransform, -34f, new Vector2(220f, 30f));
         }
 
         private void BuildCard(RectTransform root)
         {
             _cardRoot = UIElements.CreateImage(root, "Card", UIElements.RoundedSprite, UIElements.CardColor).rectTransform;
             _cardRoot.anchorMin = _cardRoot.anchorMax = new Vector2(0.5f, 0.5f);
+            _cardRoot.pivot = new Vector2(0.5f, 0.5f);
             _cardRoot.sizeDelta = new Vector2(780f, 470f);
             _cardRoot.anchoredPosition = new Vector2(0f, 30f);
             _cardRoot.localScale = new Vector3(1f, 0f, 1f);
 
             _topicText = UIElements.CreateText(_cardRoot, "TopicText", "", 18, TextAnchor.MiddleCenter, UIElements.AccentColor);
-            Place(_topicText.rectTransform, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, -16f), new Vector2(40f, 22f));
+            PlaceInside(_topicText.rectTransform, new Vector2(0f, 0.95f), new Vector2(1f, 0.95f), new Vector2(0f, -8f), new Vector2(0f, 26f));
 
             _promptText = UIElements.CreateText(_cardRoot, "PromptText", "", 30, TextAnchor.MiddleCenter, UIElements.TextColor);
-            Place(_promptText.rectTransform, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, -50f), new Vector2(60f, 130f));
+            PlaceInside(_promptText.rectTransform, new Vector2(0f, 0.94f), new Vector2(1f, 0.52f), Vector2.zero, new Vector2(60f, 0f));
 
             var buttonsRoot = new GameObject("Choices", typeof(RectTransform)).transform as RectTransform;
             buttonsRoot.SetParent(_cardRoot, false);
-            buttonsRoot.anchorMin = new Vector2(0f, 0f);
-            buttonsRoot.anchorMax = new Vector2(1f, 0f);
-            buttonsRoot.sizeDelta = new Vector2(-70f, 220f);
-            buttonsRoot.anchoredPosition = new Vector2(0f, 30f);
+            buttonsRoot.anchorMin = new Vector2(0.05f, 0.05f);
+            buttonsRoot.anchorMax = new Vector2(0.95f, 0.48f);
+            buttonsRoot.offsetMin = Vector2.zero;
+            buttonsRoot.offsetMax = Vector2.zero;
 
             var layout = buttonsRoot.gameObject.AddComponent<VerticalLayoutGroup>();
             layout.spacing = 12f;
@@ -114,10 +107,10 @@ namespace Flashcards.View
 
             _nextButton = UIElements.CreateButton(_cardRoot, "NextButton", "Next", 22);
             _nextButtonRoot = _nextButton.GetComponent<RectTransform>();
-            _nextButtonRoot.anchorMin = _nextButtonRoot.anchorMax = new Vector2(1f, 0f);
+            _nextButtonRoot.anchorMin = _nextButtonRoot.anchorMax = new Vector2(0.95f, 0.05f);
             _nextButtonRoot.pivot = new Vector2(1f, 0f);
             _nextButtonRoot.sizeDelta = new Vector2(170f, 50f);
-            _nextButtonRoot.anchoredPosition = new Vector2(-25f, -60f);
+            _nextButtonRoot.anchoredPosition = new Vector2(18f, 18f);
             _nextButtonRoot.localScale = Vector3.zero;
             _nextButton.image.color = UIElements.AccentColor;
             _nextButton.GetComponent<FlashcardButtonView>().CacheColors(UIElements.AccentColor, new Color32(255, 214, 120, 255));
@@ -130,15 +123,14 @@ namespace Flashcards.View
         {
             _explanationBg = UIElements.CreateImage(root, "Explanation", UIElements.RoundedSprite, UIElements.PanelColor);
             RectTransform panel = _explanationBg.rectTransform;
-            panel.anchorMin = new Vector2(0f, 0f);
-            panel.anchorMax = new Vector2(1f, 0f);
-            panel.pivot = new Vector2(0.5f, 0f);
-            panel.sizeDelta = new Vector2(-60f, 88f);
-            panel.anchoredPosition = new Vector2(0f, 18f);
+            panel.anchorMin = new Vector2(0.03f, 0.03f);
+            panel.anchorMax = new Vector2(0.97f, 0.16f);
+            panel.offsetMin = Vector2.zero;
+            panel.offsetMax = Vector2.zero;
             panel.gameObject.SetActive(false);
 
             _explanationText = UIElements.CreateText(panel, "ExplanationText", "", 20, TextAnchor.MiddleLeft, UIElements.TextColor);
-            Place(_explanationText.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 1f), new Vector2(24f, 12f), new Vector2(48f, 24f));
+            StretchWithPadding(_explanationText.rectTransform, 24f, 14f);
         }
 
         private void BuildResults(RectTransform root)
@@ -150,7 +142,7 @@ namespace Flashcards.View
             _resultsRoot.localScale = Vector3.zero;
 
             _resultText = UIElements.CreateText(_resultsRoot, "ResultText", "", 30, TextAnchor.MiddleCenter, UIElements.TextColor);
-            Place(_resultText.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 1f), new Vector2(0f, 60f));
+            PlaceInside(_resultText.rectTransform, new Vector2(0f, 1f), new Vector2(1f, 0.2f), new Vector2(0f, -30f), new Vector2(60f, 0f));
 
             _againButton = UIElements.CreateButton(_resultsRoot, "PlayAgainButton", "Play again", 24);
             RectTransform againRoot = _againButton.GetComponent<RectTransform>();
@@ -320,20 +312,48 @@ namespace Flashcards.View
             rect.offsetMax = Vector2.zero;
         }
 
-        private static void Place(RectTransform rect, Vector2 anchorMin, Vector2 anchorMax, Vector2 offset, Vector2? size = null)
+        private static void StretchWithPadding(RectTransform rect, float horizontal, float vertical)
+        {
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = new Vector2(horizontal, vertical);
+            rect.offsetMax = new Vector2(-horizontal, -vertical);
+        }
+
+        private static void PlaceTopLeft(RectTransform rect, float x, float y, Vector2 size)
+        {
+            rect.anchorMin = new Vector2(0f, 1f);
+            rect.anchorMax = new Vector2(0f, 1f);
+            rect.pivot = new Vector2(0f, 0.5f);
+            rect.anchoredPosition = new Vector2(x, y);
+            rect.sizeDelta = size;
+        }
+
+        private static void PlaceTopRight(RectTransform rect, float x, float y, Vector2 size)
+        {
+            rect.anchorMin = new Vector2(1f, 1f);
+            rect.anchorMax = new Vector2(1f, 1f);
+            rect.pivot = new Vector2(1f, 0.5f);
+            rect.anchoredPosition = new Vector2(x, y);
+            rect.sizeDelta = size;
+        }
+
+        private static void PlaceTopCenter(RectTransform rect, float y, Vector2 size)
+        {
+            rect.anchorMin = new Vector2(0.5f, 1f);
+            rect.anchorMax = new Vector2(0.5f, 1f);
+            rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = new Vector2(0f, y);
+            rect.sizeDelta = size;
+        }
+
+        private static void PlaceInside(RectTransform rect, Vector2 anchorMin, Vector2 anchorMax, Vector2 offset, Vector2 padding)
         {
             rect.anchorMin = anchorMin;
             rect.anchorMax = anchorMax;
-            if (size.HasValue)
-            {
-                rect.sizeDelta = size.Value;
-                rect.anchoredPosition = offset;
-            }
-            else
-            {
-                rect.offsetMin = offset;
-                rect.offsetMax = -offset;
-            }
+            rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.offsetMin = new Vector2(padding.x, offset.y + padding.y);
+            rect.offsetMax = new Vector2(-padding.x, offset.y - padding.y);
         }
     }
 }
