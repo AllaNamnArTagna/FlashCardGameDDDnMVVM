@@ -24,6 +24,7 @@ namespace Flashcards
             CreateCamera();
             CreateEventSystemIfMissing();
             _canvas = CreateCanvas();
+            new GameObject("SoundFx").AddComponent<SoundFx>();
             DogView dog = CreateDog(_canvas);
             QuizViewModel vm = new QuizViewModel(new ResourceQuestionRepository(), new DefaultScorePolicy());
 
