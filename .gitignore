@@ -1,0 +1,37 @@
+# Unity auto-generated folders
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]serSettings/
+[Mm]emoryCaptures/
+
+# IDE
+.vs/
+.idea/
+*.csproj
+*.sln
+*.user
+*.pidb
+*.booproj
+*.suo
+*.tmp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Unity crash reports
+sysinfo.txt
+*.stackdump
+
+# Builds
+*.apk
+*.aab
+*.unitypackage
+*.app
+
+# Exported collada
+*.collada
