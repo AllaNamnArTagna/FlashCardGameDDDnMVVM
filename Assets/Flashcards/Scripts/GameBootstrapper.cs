@@ -35,19 +35,20 @@ namespace Flashcards
             _quizView = QuizView.Create(_canvas, vm, dog);
         }
 
-        private Camera CreateCamera()
+        private void CreateCamera()
         {
-            Camera existing = Camera.main;
-            if (existing != null) return existing;
+            Camera cam = Camera.main;
+            if (cam == null)
+            {
+                var go = new GameObject("Main Camera", typeof(Camera), typeof(AudioListener));
+                cam = go.GetComponent<Camera>();
+                cam.backgroundColor = new Color32(24, 26, 38, 255);
+                go.transform.position = new Vector3(0f, 0f, -10f);
+            }
 
-            var go = new GameObject("Main Camera", typeof(Camera), typeof(AudioListener));
-            var cam = go.GetComponent<Camera>();
-            cam.backgroundColor = new Color32(24, 26, 38, 255);
             cam.clearFlags = CameraClearFlags.SolidColor;
             cam.orthographic = true;
             cam.orthographicSize = 5f;
-            go.transform.position = new Vector3(0f, 0f, -10f);
-            return cam;
         }
 
         private void CreateEventSystemIfMissing()
