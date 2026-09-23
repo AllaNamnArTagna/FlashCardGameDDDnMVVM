@@ -14,20 +14,11 @@ You should already have:
 
 Then:
 
-1. Open a terminal (Git Bash, PowerShell, or VS's built-in Git) and run this **inside your Unity project folder** (the folder that contains `Assets/`):
-   ```
-   git init
-   git remote add origin https://github.com/AllaNamnArTagna/FlashCardGameDDDnMVVM.git
-   git fetch origin
-   git checkout -b main origin/vibe/flashcard-game-b1d931
-   ```
-   (Or just download the repo as a ZIP from GitHub and copy the `Assets/Flashcards` folder into your project's `Assets/` folder.)
-2. Switch back to Unity and let it import the assets.
-3. In the top menu: **GameObject → Create Empty**. Name it `GameBootstrapper`.
-4. In the Inspector, **Add Component → Game Bootstrapper**.
-5. Press **Play**. 🎉
+1. Clone the repo (or download as ZIP) and open the folder as a project in Unity Hub.
+2. If the project was freshly cloned (no `Packages/` yet): in Unity, **Window → Package Manager → Unity Registry** → install **Unity UI (ugui)**. Unity recompiles.
+3. Press **Play**. 🎉
 
-That's the entire editor setup — all UI is built from code, so there are no prefabs to wire up and no scene references to drag.
+There is no scene setup at all: `GameLauncher` auto-creates the `GameBootstrapper` in whatever scene is loaded, and the bootstrapper sets up the camera, EventSystem, canvas and dog from code. (You can still add a `GameBootstrapper` component manually to a GameObject if you want the dog placement fields tweakable in the Inspector — the auto-launcher then stays out of the way.)
 
 ### If the Console shows an error
 Select the error text, copy it, and paste it into our chat. Pressing **Ctrl+C** in Unity's Console window copies the selected error.
@@ -66,7 +57,8 @@ Assets/Flashcards/Scripts/
 │   ├── DogView.cs              ← sprite + reaction animations
 │   ├── FlashcardButtonView.cs
 │   └── UIElements.cs           ← helpers for building UI in code
-└── GameBootstrapper.cs         ← Composition Root: wires everything together
+├── GameBootstrapper.cs         ← Composition Root: wires everything together
+└── GameLauncher.cs             ← auto-creates the bootstrapper in any scene on Play
 ```
 
 **The dependency rule:** View → ViewModel → Domain, and Infrastructure plugs into the Domain *through* its interfaces (dependency inversion). The domain and viewmodel folders import no Unity namespaces — check for yourself; that's the whole point.
