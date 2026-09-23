@@ -1,8 +1,10 @@
+using System;
 using Flashcards.Domain;
 using Flashcards.Infrastructure;
 using Flashcards.View;
 using Flashcards.ViewModel;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Flashcards
@@ -20,6 +22,7 @@ namespace Flashcards
         private void Awake()
         {
             CreateCamera();
+            CreateEventSystemIfMissing();
             _canvas = CreateCanvas();
             DogView dog = CreateDog();
             QuizViewModel vm = new QuizViewModel(new ResourceQuestionRepository(), new DefaultScorePolicy());
@@ -45,6 +48,31 @@ namespace Flashcards
             cam.orthographicSize = 5f;
             go.transform.position = new Vector3(0f, 0f, -10f);
             return cam;
+        }
+
+        private void CreateEventSystemIfMissing()
+        {
+            if (EventSystem.current != null)
+                return;
+
+            var go = new GameObject("EventSystem", typeof(EventSystem));
+            var inputSystemModule = Type.GetType("UnityEngine.InputSystem.UI.InputSystemUIInputModule, Unity.InputSystem");
+            if (inputSystemModule != null && !IsLegacyInputEnabled())
+                go.AddComponent(inputSystemModule);
+            else
+                go.AddComponent<StandaloneInputModule>();
+        }
+
+        private static bool IsLegacyInputEnabled()
+        {
+            try
+            {
+                return UnityEngine.Input.touchCount >= 0;
+            }
+            catch (InvalidOperationException)
+            {
+                return false;
+            }
         }
 
         private Canvas CreateCanvas()
