@@ -78,7 +78,7 @@ namespace Flashcards.View
             PlaceInside(_topicText.rectTransform, new Vector2(0f, 0.95f), new Vector2(1f, 0.95f), new Vector2(0f, -8f), new Vector2(0f, 26f));
 
             _promptText = UIElements.CreateText(_cardRoot, "PromptText", "", 30, TextAnchor.MiddleCenter, UIElements.TextColor);
-            PlaceInside(_promptText.rectTransform, new Vector2(0f, 0.94f), new Vector2(1f, 0.52f), Vector2.zero, new Vector2(60f, 0f));
+            PlaceInside(_promptText.rectTransform, new Vector2(0f, 0.52f), new Vector2(1f, 0.94f), Vector2.zero, new Vector2(60f, 0f));
 
             var buttonsRoot = new GameObject("Choices", typeof(RectTransform)).transform as RectTransform;
             buttonsRoot.SetParent(_cardRoot, false);
@@ -142,7 +142,7 @@ namespace Flashcards.View
             _resultsRoot.localScale = Vector3.zero;
 
             _resultText = UIElements.CreateText(_resultsRoot, "ResultText", "", 30, TextAnchor.MiddleCenter, UIElements.TextColor);
-            PlaceInside(_resultText.rectTransform, new Vector2(0f, 1f), new Vector2(1f, 0.2f), new Vector2(0f, -30f), new Vector2(60f, 0f));
+            PlaceInside(_resultText.rectTransform, new Vector2(0f, 0.2f), new Vector2(1f, 1f), new Vector2(0f, -30f), new Vector2(60f, 0f));
 
             _againButton = UIElements.CreateButton(_resultsRoot, "PlayAgainButton", "Play again", 24);
             RectTransform againRoot = _againButton.GetComponent<RectTransform>();
@@ -193,6 +193,7 @@ namespace Flashcards.View
 
         private void OnPlayAgain()
         {
+            SoundFx.Click();
             StartCoroutine(ScaleTo(_resultsRoot, Vector3.zero, 0.2f));
             _explanationBg.gameObject.SetActive(false);
             _cardRoot.gameObject.SetActive(true);
@@ -203,6 +204,7 @@ namespace Flashcards.View
 
         private void OnQuestionPresented()
         {
+            SoundFx.Click();
             Question question = _vm.CurrentQuestion;
             _topicText.text = question.Topic.ToUpperInvariant();
             _promptText.text = question.Prompt;
@@ -223,6 +225,7 @@ namespace Flashcards.View
         private void OnAnswered(AnswerOutcome outcome)
         {
             RefreshHud();
+            if (outcome.WasCorrect) SoundFx.Correct(); else SoundFx.Wrong();
 
             for (int i = 0; i < 4; i++)
             {
@@ -253,6 +256,7 @@ namespace Flashcards.View
 
         private void OnQuizFinished()
         {
+            SoundFx.Win();
             int total = _vm.QuestionCount;
             _resultText.text = $"You scored {_vm.Score} points!\n\nCorrect answers: {_vm.CorrectCount} / {total}\nBest streak: {_vm.BestStreak}";
             _explanationBg.gameObject.SetActive(false);
@@ -352,8 +356,8 @@ namespace Flashcards.View
             rect.anchorMin = anchorMin;
             rect.anchorMax = anchorMax;
             rect.pivot = new Vector2(0.5f, 0.5f);
-            rect.offsetMin = new Vector2(padding.x, offset.y + padding.y);
-            rect.offsetMax = new Vector2(-padding.x, offset.y - padding.y);
+            rect.offsetMin = new Vector2(padding.x, offset.y - padding.y);
+            rect.offsetMax = new Vector2(-padding.x, offset.y + padding.y);
         }
     }
 }
