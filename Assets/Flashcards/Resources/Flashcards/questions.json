@@ -1,0 +1,212 @@
+{
+  "questions": [
+    {
+      "id": "mvvm-1",
+      "topic": "MVVM",
+      "prompt": "What is the main responsibility of the View in MVVM?",
+      "choices": [
+        "Holds business rules and validation logic",
+        "Renders the ViewModel's state and forwards user input to it",
+        "Fetches data from a database or web API",
+        "Contains the domain entities and invariants"
+      ],
+      "correctIndex": 1,
+      "explanation": "The View is dumb: it draws what the ViewModel exposes and forwards interactions back. It should never make decisions."
+    },
+    {
+      "id": "mvvm-2",
+      "topic": "MVVM",
+      "prompt": "What is the role of the ViewModel in MVVM?",
+      "choices": [
+        "To render UI elements on screen",
+        "To store raw data exactly as it comes from the server",
+        "To expose state and commands from the model in a form the View can bind to",
+        "To communicate directly with the database"
+      ],
+      "correctIndex": 2,
+      "explanation": "The ViewModel is the adapter: it turns model state into presentable state and view actions into model operations."
+    },
+    {
+      "id": "mvvm-3",
+      "topic": "MVVM",
+      "prompt": "Which statement about the Model in MVVM is TRUE?",
+      "choices": [
+        "It must be a MonoBehaviour attached to a GameObject",
+        "It holds the data and business logic, independent of any UI framework",
+        "It always lives in the same class as the View",
+        "It is only allowed to contain serialized fields"
+      ],
+      "correctIndex": 1,
+      "explanation": "The Model is UI-agnostic. In this game, Question and QuizSession are plain C# classes with no Unity dependencies."
+    },
+    {
+      "id": "mvvm-4",
+      "topic": "MVVM",
+      "prompt": "Which dependency direction is correct in MVVM?",
+      "choices": [
+        "The ViewModel knows about the concrete View class",
+        "The View knows about the ViewModel, and the ViewModel knows about the Model",
+        "The Model references the ViewModel directly",
+        "All layers reference each other freely"
+      ],
+      "correctIndex": 1,
+      "explanation": "Dependencies point inward: View -> ViewModel -> Model. The ViewModel raises events; it never touches UI code."
+    },
+    {
+      "id": "mvvm-5",
+      "topic": "MVVM",
+      "prompt": "How does a ViewModel typically notify the View that its state changed?",
+      "choices": [
+        "By directly calling methods on the View's Button",
+        "By polling the View every frame",
+        "By raising a change/notification event that the View subscribes to",
+        "By writing the new state to a file the View watches"
+      ],
+      "correctIndex": 2,
+      "explanation": "In WPF this is INotifyPropertyChanged; in Unity, plain C# events work well. QuizViewModel raises StateChanged and QuestionPresented."
+    },
+    {
+      "id": "mvvm-6",
+      "topic": "MVVM",
+      "prompt": "What is data binding in the context of MVVM?",
+      "choices": [
+        "Copying files between folders during a build",
+        "A mechanism that automatically synchronizes View elements with ViewModel state",
+        "Serializing the ViewModel into JSON on every frame",
+        "Linking two GameObjects in the scene hierarchy"
+      ],
+      "correctIndex": 1,
+      "explanation": "Binding keeps the View in sync with the ViewModel. This game binds explicitly in event handlers, which is common in Unity."
+    },
+    {
+      "id": "mvvm-7",
+      "topic": "MVVM",
+      "prompt": "Why is it useful that the ViewModel has no references to UI classes?",
+      "choices": [
+        "It makes the ViewModel slower but safer",
+        "It lets you unit test presentation logic without launching a UI engine",
+        "It is required by the C# language specification",
+        "It reduces the file size of the compiled game"
+      ],
+      "correctIndex": 1,
+      "explanation": "QuizViewModel can be tested in plain C# test projects because it depends only on abstractions like IQuestionRepository."
+    },
+    {
+      "id": "ddd-1",
+      "topic": "DDD",
+      "prompt": "What is a Domain in Domain-Driven Design?",
+      "choices": [
+        "The folder where Unity stores scene files",
+        "The sphere of knowledge the software is about, e.g. quiz questions and scoring",
+        "The network protocol the game uses",
+        "Unity's name for a GameObject group"
+      ],
+      "correctIndex": 1,
+      "explanation": "The domain is the subject area. Here it's the quiz itself: questions, answers, streaks, and score rules."
+    },
+    {
+      "id": "ddd-2",
+      "topic": "DDD",
+      "prompt": "What is an Entity in DDD?",
+      "choices": [
+        "An object with an identity that stays the same even as its data changes",
+        "Any GameObject in the Unity scene",
+        "A database table with no primary key",
+        "A UI prefab that can be instantiated"
+      ],
+      "correctIndex": 0,
+      "explanation": "An Entity has an Id and a lifecycle. Question has an Id; two Question objects with the same Id are the same question."
+    },
+    {
+      "id": "ddd-3",
+      "topic": "DDD",
+      "prompt": "What is a Value Object in DDD?",
+      "choices": [
+        "A mutable object tracked by its database row",
+        "An immutable object defined entirely by its values, with no identity",
+        "Any C# variable of type int or float",
+        "A GameObject that never moves"
+      ],
+      "correctIndex": 1,
+      "explanation": "AnswerOutcome is a value object: two outcomes with the same values are interchangeable, and it has no identity."
+    },
+    {
+      "id": "ddd-4",
+      "topic": "DDD",
+      "prompt": "What is a Repository in DDD?",
+      "choices": [
+        "A UI component that displays lists",
+        "An object that provides the illusion of an in-memory collection of domain objects",
+        "A Unity Asset Store package",
+        "A saved copy of the project on GitHub"
+      ],
+      "correctIndex": 1,
+      "explanation": "IQuestionRepository gives the domain collection-like access to questions, hiding where they actually come from (JSON, a server, anything)."
+    },
+    {
+      "id": "ddd-5",
+      "topic": "DDD",
+      "prompt": "What does Ubiquitous Language mean in DDD?",
+      "choices": [
+        "Using English everywhere in the codebase",
+        "Naming code elements after the words domain experts actually use",
+        "Writing comments in every supported language",
+        "Prefixing all class names with the project name"
+      ],
+      "correctIndex": 1,
+      "explanation": "When a teacher says 'streak bonus', the code says StreakBonus. Shared vocabulary between experts and developers."
+    },
+    {
+      "id": "ddd-6",
+      "topic": "DDD",
+      "prompt": "What is a Domain Service in DDD?",
+      "choices": [
+        "A stateless operation that expresses a domain concept that doesn't naturally belong to one Entity",
+        "A background thread that syncs with a server",
+        "The MonoBehaviour that boots the game",
+        "A class that draws the UI"
+      ],
+      "correctIndex": 0,
+      "explanation": "IScorePolicy is domain-adjacent: awarding points is domain logic that isn't owned by Question or QuizSession alone."
+    },
+    {
+      "id": "ddd-7",
+      "topic": "DDD",
+      "prompt": "What is an Aggregate in DDD?",
+      "choices": [
+        "A SQL JOIN of all tables",
+        "A cluster of domain objects treated as one unit, with one root controlling all changes",
+        "A folder of related scripts",
+        "The total sum of the player's score"
+      ],
+      "correctIndex": 1,
+      "explanation": "QuizSession acts as an aggregate root: questions, streak and score change only through its Answer method, keeping invariants safe."
+    },
+    {
+      "id": "mix-1",
+      "topic": "MVVM + DDD",
+      "prompt": "Where does a Repository belong in an MVVM + DDD project?",
+      "choices": [
+        "In the View, next to the UI code",
+        "In the ViewModel, hard-coded as private methods",
+        "Behind an interface in the domain; the ViewModel depends on the interface",
+        "Inside the Unity scene as a GameObject"
+      ],
+      "correctIndex": 2,
+      "explanation": "The domain defines IQuestionRepository; infrastructure implements it; the ViewModel receives the interface. This is dependency inversion."
+    },
+    {
+      "id": "mix-2",
+      "topic": "MVVM + DDD",
+      "prompt": "Why should UI code (like MonoBehaviour) stay out of the domain and ViewModel layers?",
+      "choices": [
+        "Because MonoBehaviours cannot contain logic",
+        "So those layers stay testable, portable, and independent of Unity's frame loop",
+        "Because Unity forbids classes outside the Assets folder",
+        "So the game runs faster at runtime"
+      ],
+      "correctIndex": 1,
+      "explanation": "Domain and ViewModel here compile as plain C#. You could reuse them in a console app or a WPF quiz trainer unchanged."
+    }
+  ]
+}
